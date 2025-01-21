@@ -1,0 +1,306 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  font-size: 1em;
+  /* overflow: hidden; */
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin:0;  
+}
+
+body {
+  background-color: #1E1E1E;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Chatbox container */
+#chatbox {
+  margin: 0 auto;
+  margin-top: 4em;
+  position: relative;
+  width: 90vw; 
+  max-width: 800px;   
+  height: 80vh;
+  padding: 16px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-grow: 1;
+}
+
+h2 {
+  flex-grow: 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 2em;
+}
+
+/* Intro texte */
+.intro {
+  font-style: italic;
+  display: flex;
+  justify-content: center;
+  font-size: 1.1em;
+}
+
+#messages {
+  position: relative;
+  box-sizing: border-box;
+  height: 300px;
+  overflow-y: scroll;
+  border: 1px solid #555;
+  padding: 16px;
+  background-color: #252525;
+  flex-grow: 1;
+  border-radius: 10px;
+  font-size: 1.1em;
+}
+
+
+#messages p, #messages span {
+  padding-bottom: 16px;
+  word-wrap: break-word;
+}
+
+.user-message{
+  color: white;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.bot-message, .bot-message span {
+  color: #a4a4a4;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+/* Input avec bouton envoyer */
+.input-with-button {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  box-sizing: border-box;
+  background-color: #1E1E1E;
+  color: white;
+  border: 1px solid #555;
+  padding: 16px;
+  border-radius: 10px;
+  resize: none;
+  padding-right: 50px;
+  overflow-y: scroll;
+  transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+  border-color: #038118;
+  outline: none;
+}
+
+/* Cacher scrollbar */
+textarea::-webkit-scrollbar, #messages::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+textarea::placeholder {
+  font-size: 1em;
+}
+
+#sendButton {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background-color: #66D97A;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#sendButton:hover {
+  background-color: #038118;
+}
+
+.input-with-button:focus-within #sendButton {
+  background-color: #038118;
+}
+
+.input-with-button:focus-within textarea {
+  box-shadow: 0 0 8px 2px rgba(3, 129, 24, 0.8); 
+  border-color: #038118; 
+  transition: box-shadow 0.3s ease, border-color 0.3s ease; 
+}
+
+#sendButton {
+  font-size: 1em;
+}
+
+footer {
+  box-sizing: border-box;
+  left:0;
+  padding: 1% 5%;
+  width: 100%;
+  display: flex;
+  height: 5vh;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #555;
+  font-size: 0.85em;
+  margin-top: auto;
+  position: absolute;
+  bottom: 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+/* Nom-Prénom */
+.footer-content .left {
+  font-weight: bold;
+  text-align: left;
+  margin-right: auto;
+  color: lightgrey;
+}
+
+/* Source API */
+.footer-content .right {
+  text-align: right;
+  font-weight: normal;
+  color: #999;
+  font-size: 0.85em;
+}
+
+.footer-content a {
+  color: #66D97A;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-content a:hover {
+  color: #038118;
+}
+
+@media (max-width: 768px) {
+  #chatbox {
+    padding: 16px;
+    width: 90vw;
+    max-height: 70vh;
+  }
+
+  h2 {
+    font-size: 1.8em;
+  }
+
+  .intro {
+    font-size: 1em;
+  }
+
+  #messages {
+    font-size: 1em;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  textarea::placeholder {
+    font-size: 1em;
+  }
+
+  #sendButton {
+    padding: 10px;
+  }
+
+  footer {
+    font-size: 0.9em;
+    padding: 5% 3%;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-content .left, .footer-content .right {
+    font-size: 0.8em;
+    margin: 5px 0;
+  }
+}
+
+/* Responsive ajusté pour les petites résolutions */
+@media (max-width: 480px) {
+  .input-with-button {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #sendButton {
+    right: 10px;
+    bottom: 10px;
+    padding: 8px;
+    font-size: 0.875em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .intro {
+    font-size: 0.9em;
+  }
+
+  #messages {
+    font-size: 0.9em;
+  }
+
+  textarea {
+    height: 80px;
+  }
+
+  textarea::placeholder {
+    font-size: 0.9em;
+  }
+
+  footer {
+    font-size: 0.8em;
+    padding: 1% 2%;
+    height: 7vh;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-content .left, .footer-content .right {
+    font-size: 0.75em;
+    margin: 5px 0;
+  }
+}
+/*----------------------------------------------------------------------------------------*/
+/* Style du bouton "Vider la conversation" en test */
