@@ -10,6 +10,7 @@ const InputSection = ({ userInput, onUserInputChange, sendMessage, isLoading }) 
     };
     
     return (
+        <>
         <div id="inputSection">
             <div className="input-with-button">
                 <textarea
@@ -25,6 +26,7 @@ const InputSection = ({ userInput, onUserInputChange, sendMessage, isLoading }) 
                 </button>
             </div>
         </div>
+        </>
     );
 };
 

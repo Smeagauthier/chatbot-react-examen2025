@@ -51,7 +51,7 @@ const ChatBox = () => {
     setIsLoading(true);
 
     try {
-      const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}". N'utilise que des vers poétiques. Les vers doivent obligatoirement avoir des rimes riches entre eux et doivent avoir un sens philosophique. Voici un exemple pour t'inspirer :
+      const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}". N'utilise que des vers poétiques. Les vers doivent obligatoirement avoir des rimes riches entre eux et doivent avoir un sens philosophique. Je veux que tu prennes en compte la phonétique des mots. Voici un exemple pour t'inspirer :
       "Nous étions quelques gamins en quatre-vingt,
       Quatre copains en chemin,
       Construisant leur destin de délires souterrains,

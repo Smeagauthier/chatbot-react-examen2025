@@ -1,6 +1,7 @@
 
 const MessageList = ({ messages, isLoading }) => {
   return (
+    <>
     <div id="messages">
       {messages.map((message, index) => (
         <p key={index} className={message.role === 'user' ? 'user-message' : 'bot-message'}>
@@ -9,6 +10,7 @@ const MessageList = ({ messages, isLoading }) => {
       ))}
       {isLoading && <p className="bot-message loading">Chatbot : Génération en cours...</p>}
     </div>
+    </>
   );
 };
 
