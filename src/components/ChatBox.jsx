@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ClearButton from './ClearButton';
 import MessageList from './MessageList';
 import InputSection from './InputSection';
-import Footer from './Footer';
 
 const ChatBox = () => {
   const [messages, setMessages] = useState([]);
@@ -15,39 +16,36 @@ const ChatBox = () => {
     if (savedConversation) {
       setMessages(JSON.parse(savedConversation));
     }
-  }, []); // Cette useEffect s'exécute une seule fois lors du premier rendu.
+  }, []);
 
   // Sauvegarder la conversation dans le localStorage
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem('conversation', JSON.stringify(messages));
     }
-  }, [messages]); // Cette useEffect s'exécute chaque fois que `messages` change.
+  }, [messages]);
 
   const handleUserInputChange = (e) => {
     setUserInput(e.target.value);
   };
 
-  // Nettoyer les entrées utilisateur pour éviter les caractères spéciaux
   const nettoyerEntree = (input) => {
     const div = document.createElement('div');
     div.textContent = input;
     return div.innerHTML;
   };
 
-  // Fonction pour envoyer un message
   const sendMessage = async () => {
     if (!userInput.trim()) return;
 
     const cleanedInput = nettoyerEntree(userInput);
 
-    // Ajouter le message de l'utilisateur
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: 'user', content: `Vous : ${cleanedInput}` },
     ]);
 
-    setUserInput(''); // Réinitialiser l'input de l'utilisateur
+    setUserInput('');
     setIsLoading(true);
 
     try {
@@ -58,22 +56,18 @@ const ChatBox = () => {
       Nos mains étaient des poings et l'avenir, un tremplin."
       Maintenant, crée ton poème sur le thème "${userInput}".`;
 
-      const response = await fetch('https://api.deepinfra.com/v1/openai/chat/completions', {
-        method: 'POST',
+      const response = await axios.post('https://api.deepinfra.com/v1/openai/chat/completions', {
+        model: 'meta-llama/Meta-Llama-3.1-405B-Instruct',
+        messages: [{ role: 'user', content: prompt }],
+      }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer q1q1hnYUxBDk2gYnoLOjTsBJ4kXai8a0',
+          'Authorization': 'Bearer LfL2T3VsHXZ6tegNML6vEOrqYBDxoBnW',
         },
-        body: JSON.stringify({
-          model: 'meta-llama/Meta-Llama-3.1-405B-Instruct',
-          messages: [{ role: 'user', content: prompt }],
-        }),
       });
 
-      const data = await response.json();
-
-      if (data.choices && data.choices.length > 0) {
-        const generatedPoem = nettoyerTextePoeme(data.choices[0].message.content.trim());
+      if (response.data.choices && response.data.choices.length > 0) {
+        const generatedPoem = nettoyerTextePoeme(response.data.choices[0].message.content.trim());
         setMessages((prevMessages) => [
           ...prevMessages,
           { role: 'bot', content: `Chatbot : ${generatedPoem}` },
@@ -95,33 +89,47 @@ const ChatBox = () => {
     }
   };
 
-  // Fonction pour nettoyer le texte du poème (réponse du chatbot), retirer les caractères spéciaux
   const nettoyerTextePoeme = (poem) => {
     return poem
-    .replace(/[{}*/\\;]/g, '') // Pas besoin d'échapper `/` ou `*` ici
+    .replace(/[{}*/\\;]/g, '')
     .replace(/"""|return/g, '')
     .replace(/(\r\n|\n|\r)/gm, '<br>')
     .trim();  
   };
 
+  // Fonction pour effacer la conversation
+  const clearConversation = () => {
+    setMessages([]);
+    localStorage.removeItem('conversation'); // Supprime du localStorage
+    console.log('Conversation effacée.');
+  };
+
   return (
     <>
-    <div id="chatbox">
-      <h2>Bienvenue sur Chatbot poétique !</h2>
-      <p className="intro">Posez votre thème et recevez des réponses en vers.</p>
-      <MessageList 
-        messages={messages} 
-        isLoading={isLoading}  
-      />
-      <InputSection
-        id = "inputSection"
-        userInput={userInput}
-        onUserInputChange={handleUserInputChange}
-        sendMessage={sendMessage}
-        isLoading={isLoading}
-      />
-    </div>
-    <Footer />
+      <div id="chatbox">
+      <div className="chatbox-header">
+        <div className="clear-btn-container">
+          <ClearButton 
+            onClear={clearConversation}
+            disabled={isLoading}
+          />
+        </div>
+        <p className="intro">Posez votre thème et recevez des réponses en vers.</p>
+      </div>
+
+        <MessageList 
+          messages={messages} 
+          isLoading={isLoading}  
+        />
+        
+        <InputSection
+          id="inputSection"
+          userInput={userInput}
+          onUserInputChange={handleUserInputChange}
+          sendMessage={sendMessage}
+          isLoading={isLoading}
+        />
+      </div>
     </>
   );
 };

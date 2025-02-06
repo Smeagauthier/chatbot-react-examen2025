@@ -20,6 +20,7 @@ const InputSection = ({ userInput, onUserInputChange, sendMessage, isLoading }) 
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
                     disabled={isLoading}
+                    className='pl-3 pt-3'
                 />
                 <button onClick={sendMessage} disabled={!userInput.trim() || isLoading}             id="sendButton">
                     <FontAwesomeIcon icon={faPaperPlane} />

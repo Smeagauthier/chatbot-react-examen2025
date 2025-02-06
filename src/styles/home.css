@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+IN:wght@100..400&display=swap');
+
+.intro-section {
+    background-image: url('../../public/encrier.png');
+    background-position: bottom right;
+    background-size: auto 70%; 
+    background-repeat: no-repeat;
+}
+
+.font-calligraphy {
+    font-family: "Playwrite IN", serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+@media (max-width: 768px) {
+    .intro-section {
+        background-size: auto 60%; 
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-section {
+        background-position: bottom;
+        background-size: auto 45%;
+    }
+}

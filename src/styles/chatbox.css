@@ -1,0 +1,168 @@
+/* Chatbox container */
+#chatbox {
+    margin: 0 auto;
+    margin-top: 4em;
+    position: relative;
+    width: 90vw; 
+    max-width: 800px;   
+    height: 80vh;
+    padding: 16px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.chatbox-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto; 
+    align-items: center;
+    padding: 0 10px;
+}
+
+/* Intro texte */
+.intro {
+    font-style: italic;
+    display: flex;
+    justify-content: center;
+    font-size: 1.1em;
+    grid-column: 1 / -1; 
+    margin: 0;
+    padding-top: 25px; 
+    text-align: center;
+}
+
+/* Messages dans la box*/
+#messages {
+    position: relative;
+    box-sizing: border-box;
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #555;
+    padding: 16px;
+    background-color: #252525;
+    flex-grow: 1;
+    border-radius: 10px;
+    font-size: 1.1em;
+}
+
+#messages p, #messages span {
+    padding-bottom: 16px;
+    word-wrap: break-word;
+}
+
+.user-message{
+    color: white;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.bot-message, .bot-message span {
+    color: #a4a4a4;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+/* Input avec bouton envoyer */
+.input-with-button {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    box-sizing: border-box;
+    background-color: #1E1E1E;
+    color: white;
+    border: 1px solid #555;
+    padding: 16px;
+    border-radius: 10px;
+    resize: none;
+    padding-right: 50px;
+    overflow-y: scroll;
+    transition: border-color 0.3s ease;
+    font-size: 1em; 
+}
+
+textarea:focus {
+    border-color: #038118;
+    outline: none;
+    box-shadow: 0 0 8px 2px rgba(3, 129, 24, 0.8); /* Optionnel, ajout d'un effet de focus */
+}
+
+/* Cacher scrollbar */
+textarea::-webkit-scrollbar, #messages::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+textarea::placeholder {
+    font-size: 1em;
+    color: #aaa; 
+}
+
+#sendButton {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background-color: #66D97A;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#sendButton:hover {
+    background-color: #038118;
+}
+
+.clear-btn-container {
+    grid-row: 1;
+    grid-column: 2; 
+    justify-self: end; 
+}
+
+#clearButton {
+    position: absolute;
+    right: 18px;
+    top: 10px;
+    background-color: #e3342f;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#clearButton:hover {
+    background-color: #9b0803; 
+}
+
+.input-with-button:focus-within #sendButton {
+    background-color: #038118;
+}
+
+.input-with-button:focus-within textarea {
+    box-shadow: 0 0 8px 2px rgba(3, 129, 24, 0.8); 
+    border-color: #038118; 
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; 
+}
+
