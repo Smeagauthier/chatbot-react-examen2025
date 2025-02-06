@@ -22,7 +22,7 @@
 
 @media (max-width: 480px) {
     .intro-section {
-        background-position: bottom;
+        background-position: bottom center;
         background-size: auto 45%;
     }
 }

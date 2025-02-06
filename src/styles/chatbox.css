@@ -40,7 +40,7 @@
 #messages {
     position: relative;
     box-sizing: border-box;
-    height: 300px;
+    height: auto; /*Avant: 300px*/
     overflow-y: scroll;
     border: 1px solid #555;
     padding: 16px;

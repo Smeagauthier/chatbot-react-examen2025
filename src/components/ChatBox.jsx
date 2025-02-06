@@ -9,16 +9,13 @@ const ChatBox = () => {
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Restaurer la conversation depuis le localStorage lors du chargement
   useEffect(() => {
     const savedConversation = localStorage.getItem('conversation');
-    console.log('Conversation dans localStorage:', savedConversation);
     if (savedConversation) {
       setMessages(JSON.parse(savedConversation));
     }
   }, []);
 
-  // Sauvegarder la conversation dans le localStorage
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem('conversation', JSON.stringify(messages));
@@ -48,65 +45,68 @@ const ChatBox = () => {
     setUserInput('');
     setIsLoading(true);
 
+    // reCAPTCHA v3 verification
     try {
-      const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}". N'utilise que des vers poétiques. Les vers doivent obligatoirement avoir des rimes riches entre eux et doivent avoir un sens philosophique. Je veux que tu prennes en compte la phonétique des mots. Voici un exemple pour t'inspirer :
-      "Nous étions quelques gamins en quatre-vingt,
-      Quatre copains en chemin,
-      Construisant leur destin de délires souterrains,
-      Nos mains étaient des poings et l'avenir, un tremplin."
-      Maintenant, crée ton poème sur le thème "${userInput}".`;
+      window.grecaptcha.ready(function() {
+        window.grecaptcha.execute('6LeoDM8qAAAAAP1o3q1Er77H0iPz2IGavY6Ik1UJ', { action: 'submit' }).then(async function(token) {
+          // Continue avec la logique d'envoi après avoir obtenu le token
+          const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}".`;
+          
+          try {
+            const response = await axios.post('https://api.deepinfra.com/v1/openai/chat/completions', {
+              model: 'meta-llama/Meta-Llama-3.1-405B-Instruct',
+              messages: [{ role: 'user', content: prompt }],
+            }, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer LfL2T3VsHXZ6tegNML6vEOrqYBDxoBnW',
+              },
+            });
 
-      const response = await axios.post('https://api.deepinfra.com/v1/openai/chat/completions', {
-        model: 'meta-llama/Meta-Llama-3.1-405B-Instruct',
-        messages: [{ role: 'user', content: prompt }],
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer LfL2T3VsHXZ6tegNML6vEOrqYBDxoBnW',
-        },
+            if (response.data.choices && response.data.choices.length > 0) {
+              const generatedPoem = nettoyerTextePoeme(response.data.choices[0].message.content.trim());
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                { role: 'bot', content: `Chatbot : ${generatedPoem}` },
+              ]);
+            } else {
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                { role: 'bot', content: 'Chatbot : Aucun résultat de l\'API.' },
+              ]);
+            }
+          } catch (error) {
+            console.error('Erreur lors de la génération du poème:', error);
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { role: 'bot', content: 'Erreur lors de la génération du poème.' },
+            ]);
+          } finally {
+            setIsLoading(false);
+          }
+        });
       });
-
-      if (response.data.choices && response.data.choices.length > 0) {
-        const generatedPoem = nettoyerTextePoeme(response.data.choices[0].message.content.trim());
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: 'bot', content: `Chatbot : ${generatedPoem}` },
-        ]);
-      } else {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: 'bot', content: 'Chatbot : Aucun résultat de l\'API.' },
-        ]);
-      }
     } catch (error) {
-      console.error('Erreur lors de la génération du poème:', error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { role: 'bot', content: 'Erreur lors de la génération du poème.' },
-      ]);
-    } finally {
+      console.error('Erreur lors de l\'exécution de reCAPTCHA:', error);
       setIsLoading(false);
     }
   };
 
   const nettoyerTextePoeme = (poem) => {
     return poem
-    .replace(/[{}*/\\;]/g, '')
-    .replace(/"""|return/g, '')
-    .replace(/(\r\n|\n|\r)/gm, '<br>')
-    .trim();  
+      .replace(/[{}*/\\;]/g, '')
+      .replace(/"""|return/g, '')
+      .replace(/(\r\n|\n|\r)/gm, '<br>')
+      .trim();
   };
 
-  // Fonction pour effacer la conversation
   const clearConversation = () => {
     setMessages([]);
-    localStorage.removeItem('conversation'); // Supprime du localStorage
-    console.log('Conversation effacée.');
+    localStorage.removeItem('conversation');
   };
 
   return (
-    <>
-      <div id="chatbox">
+    <div id="chatbox">
       <div className="chatbox-header">
         <div className="clear-btn-container">
           <ClearButton 
@@ -117,20 +117,19 @@ const ChatBox = () => {
         <p className="intro">Posez votre thème et recevez des réponses en vers.</p>
       </div>
 
-        <MessageList 
-          messages={messages} 
-          isLoading={isLoading}  
-        />
-        
-        <InputSection
-          id="inputSection"
-          userInput={userInput}
-          onUserInputChange={handleUserInputChange}
-          sendMessage={sendMessage}
-          isLoading={isLoading}
-        />
-      </div>
-    </>
+      <MessageList 
+        messages={messages} 
+        isLoading={isLoading}  
+      />
+      
+      <InputSection
+        id="inputSection"
+        userInput={userInput}
+        onUserInputChange={handleUserInputChange}
+        sendMessage={sendMessage}
+        isLoading={isLoading}
+      />
+    </div>
   );
 };
 
