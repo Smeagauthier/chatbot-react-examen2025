@@ -8,50 +8,61 @@ const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  
+  // Récupérer la conversation enregistrée dans localStorage lors du chargement de la page
   useEffect(() => {
     const savedConversation = localStorage.getItem('conversation');
     if (savedConversation) {
       setMessages(JSON.parse(savedConversation));
     }
   }, []);
-
+  
+  // Sauvegarder les messages dans localStorage à chaque nouveau message
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem('conversation', JSON.stringify(messages));
     }
   }, [messages]);
-
+  
+  // Mettre à jour l'input
   const handleUserInputChange = (e) => {
     setUserInput(e.target.value);
   };
-
+  
+  // Fonction pour nettoyer l'entrée utilisateur des caractères spéciaux
   const nettoyerEntree = (input) => {
     const div = document.createElement('div');
     div.textContent = input;
     return div.innerHTML;
   };
-
+  
+  // Fonction principale pour envoyer le message et obtenir la réponse du chatbot sous forme de poème
   const sendMessage = async () => {
     if (!userInput.trim()) return;
-
+    
     const cleanedInput = nettoyerEntree(userInput);
-
+    
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: 'user', content: `Vous : ${cleanedInput}` },
     ]);
-
+    
     setUserInput('');
     setIsLoading(true);
-
-    // reCAPTCHA v3 verification
+    
+    // Vérification avec reCAPTCHA v3 avant l'envoi de la requête à l'API
     try {
       window.grecaptcha.ready(function() {
         window.grecaptcha.execute('6LeoDM8qAAAAAP1o3q1Er77H0iPz2IGavY6Ik1UJ', { action: 'submit' }).then(async function(token) {
-          // Continue avec la logique d'envoi après avoir obtenu le token
-          const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}".`;
           
+          const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}". N'utilise que des vers poétiques. Les vers doivent obligatoirement avoir des rimes riches entre eux et doivent avoir un sens philosophique. Je veux que tu prennes en compte la phonétique des mots. Voici un exemple pour t'inspirer :
+          "Nous étions quelques gamins en quatre-vingt,
+          Quatre copains en chemin,
+          Construisant leur destin de délires souterrains,
+          Nos mains étaient des poings et l'avenir, un tremplin."
+          Maintenant, crée ton poème sur le thème "${userInput}".`;
+          
+          // Requête à l'API pour générer un poème
           try {
             const response = await axios.post('https://api.deepinfra.com/v1/openai/chat/completions', {
               model: 'meta-llama/Meta-Llama-3.1-405B-Instruct',
@@ -62,7 +73,8 @@ const ChatBox = () => {
                 'Authorization': 'Bearer LfL2T3VsHXZ6tegNML6vEOrqYBDxoBnW',
               },
             });
-
+            
+            // Ajouter la réponse à la conversation
             if (response.data.choices && response.data.choices.length > 0) {
               const generatedPoem = nettoyerTextePoeme(response.data.choices[0].message.content.trim());
               setMessages((prevMessages) => [
@@ -91,44 +103,46 @@ const ChatBox = () => {
       setIsLoading(false);
     }
   };
-
+  
+  // Nettoyer le texte du poème reçu en supprimant les caractères spéciaux et en formatant les lignes
   const nettoyerTextePoeme = (poem) => {
     return poem
-      .replace(/[{}*/\\;]/g, '')
-      .replace(/"""|return/g, '')
-      .replace(/(\r\n|\n|\r)/gm, '<br>')
-      .trim();
+    .replace(/[{}*/\\;]/g, '')
+    .replace(/"""|return/g, '')
+    .replace(/(\r\n|\n|\r)/gm, '<br>')
+    .trim();
   };
-
+  
+  // Bouton pour effacer la conversation et la supprimer de localStorage
   const clearConversation = () => {
     setMessages([]);
     localStorage.removeItem('conversation');
   };
-
+  
   return (
     <div id="chatbox">
-      <div className="chatbox-header">
-        <div className="clear-btn-container">
-          <ClearButton 
-            onClear={clearConversation}
-            disabled={isLoading}
-          />
-        </div>
-        <p className="intro">Posez votre thème et recevez des réponses en vers.</p>
-      </div>
-
-      <MessageList 
-        messages={messages} 
-        isLoading={isLoading}  
-      />
-      
-      <InputSection
-        id="inputSection"
-        userInput={userInput}
-        onUserInputChange={handleUserInputChange}
-        sendMessage={sendMessage}
-        isLoading={isLoading}
-      />
+    <div className="chatbox-header">
+    <div className="clear-btn-container">
+    <ClearButton 
+    onClear={clearConversation}
+    disabled={isLoading}
+    />
+    </div>
+    <p className="intro">Posez votre thème et recevez des réponses en vers.</p>
+    </div>
+    
+    <MessageList 
+    messages={messages} 
+    isLoading={isLoading}  
+    />
+    
+    <InputSection
+    id="inputSection"
+    userInput={userInput}
+    onUserInputChange={handleUserInputChange}
+    sendMessage={sendMessage}
+    isLoading={isLoading}
+    />
     </div>
   );
 };
