@@ -8,7 +8,7 @@ const Navbar = () => {
   //Récupérer l'emplacement actuel de la page
   const location = useLocation();
 
-  //Fermer le menu lorsque l'emplacement de la page change
+  //Fermer le menu lorsque l'emplacement de la page change (quand on change de page)
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);

@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// Le composant ContactButton prend en entrée les propriétés suivantes pour définir quelle icone, quel label, quel lien et si le lien est externe ou non (pour redirection vers un autre site).
 const ContactButton = ({ icon, label, link, isExternal }) => {
   const handleClick = () => {
     if (isExternal) {
-      window.open(link, '_blank', 'noopener,noreferrer');
+      window.open(link, '_blank', 'noopener,noreferrer'); //Pour ne pas transférer le contexte de la page actuelle vers la nouvelle page.
     } else {
       window.location.href = link;
     }

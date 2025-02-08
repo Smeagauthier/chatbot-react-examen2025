@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const Home = () => {
+  // Animation pour le titre, mot par mot. Issue de framer-motion pour plus d'options.
   const words = [
     "Écrire", "le", "monde", "grâce", "au", "chatbot", "poétique"
   ];
@@ -11,6 +12,7 @@ const Home = () => {
     <section className="relative w-full min-h-[80vh] mt-20 pt-5 flex items-center justify-center text-white overflow-hidden px-4 sm:px-6 lg:px-8 intro-section">
       <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-4xl space-y-6 sm:space-y-8">
 
+        {/* Chaque mot est divisé en span, opacité de 0 et décalage vertical, chaque mot apparait avec un délai pour une durée de l'animation de 1.5s. Le mot vient du haut, apparait "smooth" pour aller vers le bas. L'animation est de type spring (ressort) et une rigidité et amortissement définis pour un effet visuel naturel. */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-calligraphy">
           {words.map((word, index) => (
             <motion.span
@@ -27,6 +29,7 @@ const Home = () => {
               }}
               className="inline-block mr-5 mt-2 mb-2 font-calligraphy"
             >
+              {/* Le mot est séparé par un espace (sinon le tableau est considéré comme un seul mot) */}
               {word}{" "}
             </motion.span>
           ))}

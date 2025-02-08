@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
+//Composant textarea avec le bouton d'envoi (désactivé si le chatbot est en train d'écrire)
 const InputSection = ({ userInput, onUserInputChange, sendMessage, isLoading }) => {
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {

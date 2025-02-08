@@ -7,6 +7,7 @@ const Presentation = () => {
     <section id="presentation" className="bg-[#1E1E1E] pt-12 mt-20 px-8 text-center flex flex-col justify-center">
       <div className="max-w-screen-lg mx-auto">
 
+        {/* Titre "Résumé" avec animation dans lequel il apparait "smooth" d'en haut.*/}
         <motion.h2
           className="text-[2em] sm:text-[2.5em] md:text-[3em] lg:text-[3.5em] xl:text-[4em] font-semibold text-white mb-12 relative inline-block text-center font-calligraphy"
           initial={{ opacity: 0, y: -50 }} 

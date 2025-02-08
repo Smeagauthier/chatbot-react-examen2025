@@ -18,6 +18,7 @@ const Contact = () => {
           Contact
         </motion.h2>
 
+        {/* Chaque bouton est un composant ContactButton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 justify-items-center">
           <ContactButton
             icon={faGithub}

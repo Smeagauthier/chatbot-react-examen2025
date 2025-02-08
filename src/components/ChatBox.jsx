@@ -7,6 +7,7 @@ import InputSection from './InputSection';
 const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
+  //Le chatbot est en train d'écrire
   const [isLoading, setIsLoading] = useState(false);
   
   // Récupérer la conversation enregistrée dans localStorage lors du chargement de la page
@@ -38,10 +39,14 @@ const ChatBox = () => {
   
   // Fonction principale pour envoyer le message et obtenir la réponse du chatbot sous forme de poème
   const sendMessage = async () => {
+
+    // Vérifier si l'input est vide
     if (!userInput.trim()) return;
     
+    // Nettoyer l'entrée
     const cleanedInput = nettoyerEntree(userInput);
     
+    // Ajouter le message de l'utilisateur à la liste des messages
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: 'user', content: `Vous : ${cleanedInput}` },
@@ -62,7 +67,7 @@ const ChatBox = () => {
           Nos mains étaient des poings et l'avenir, un tremplin."
           Maintenant, crée ton poème sur le thème "${userInput}".`;
           
-          // Requête à l'API pour générer un poème
+          // Requête à l'API pour générer un poème avec axios
           try {
             const response = await axios.post('https://api.deepinfra.com/v1/openai/chat/completions', {
               model: 'meta-llama/Meta-Llama-3.1-405B-Instruct',
@@ -74,7 +79,7 @@ const ChatBox = () => {
               },
             });
             
-            // Ajouter la réponse à la conversation
+            // Traiter la reponse de l'API (est-ce qu'elle existe ? Si oui, on la traite, si non on affiche un message "aucun résultat" ou une erreur)
             if (response.data.choices && response.data.choices.length > 0) {
               const generatedPoem = nettoyerTextePoeme(response.data.choices[0].message.content.trim());
               setMessages((prevMessages) => [
