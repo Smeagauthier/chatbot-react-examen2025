@@ -58,7 +58,7 @@ const ChatBox = () => {
     // Vérification avec reCAPTCHA v3 avant l'envoi de la requête à l'API
     try {
       window.grecaptcha.ready(function() {
-        window.grecaptcha.execute('6LeoDM8qAAAAAP1o3q1Er77H0iPz2IGavY6Ik1UJ', { action: 'submit' }).then(async function(token) {
+        window.grecaptcha.execute('6Le7eEIsAAAAAKFlw13zIe0YXMiaI05q4zHslXJp', { action: 'submit' }).then(async function(token) {
           
           const prompt = `Écris un poème en 6 vers sur le thème suivant : "${userInput}". N'utilise que des vers poétiques. Les vers doivent obligatoirement avoir des rimes riches entre eux et doivent avoir un sens philosophique. Je veux que tu prennes en compte la phonétique des mots. Voici un exemple pour t'inspirer :
           "Nous étions quelques gamins en quatre-vingt,
